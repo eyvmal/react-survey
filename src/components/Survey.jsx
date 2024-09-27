@@ -21,13 +21,19 @@ function Survey() {
   const radioButtons = [1, 2, 3, 4, 5]; // Used to set up radio buttons
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
 
     if (type === "checkbox") {
       setFormData((prevData) => {
-        const updatedTimeSpent = prevData.timeSpent.includes(value)
-          ? prevData.timeSpent.filter((item) => item !== value) // Unchecking
-          : [...prevData.timeSpent, value]; // Checking
+        let updatedTimeSpent;
+
+        if (prevData.timeSpent.includes(name)) {
+          // Unchecking, so remove the value
+          updatedTimeSpent = prevData.timeSpent.filter((item) => item !== name);
+        } else {
+          // Checking, so add the value
+          updatedTimeSpent = [...prevData.timeSpent, name];
+        }
 
         return { ...prevData, timeSpent: updatedTimeSpent };
       });
@@ -41,7 +47,6 @@ function Survey() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
 
     const answerItem = {
       username: formData.username,
@@ -104,7 +109,7 @@ function Survey() {
                         name={key}
                         value={value}
                         onChange={handleChange}
-                        checked={formData.timeSpent.includes(value)}
+                        checked={formData.timeSpent.includes(key)}
                       />
                       {value}
                     </label>
